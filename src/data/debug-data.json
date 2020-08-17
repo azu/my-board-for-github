@@ -1,0 +1,25 @@
+[
+  {
+    "id": "inbox",
+    "title": "Inbox",
+    "items": [
+      {
+        "url": "https://github.com/asciidwango/js-primer/issues/1232",
+        "type": "issue",
+        "meta": {}
+      }
+    ]
+  },
+  {
+    "id": "progressing",
+    "title": "Progressing",
+    "items": [
+    ]
+  },
+  {
+    "id": "done",
+    "title": "Done",
+    "items": [
+    ]
+  }
+]
