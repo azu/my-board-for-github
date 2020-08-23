@@ -1,6 +1,7 @@
 .react-trello-card > header {
     display: block;
     white-space: pre-wrap;
+    pointer-events: none;
 }
 
 .react-trello-card > header > span[draggable] {
@@ -10,6 +11,7 @@
 article.react-trello-card {
     text-align: left;
 }
+
 .MyBoardDescription ul {
     padding-left: 0.1em;
 }
