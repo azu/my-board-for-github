@@ -178,3 +178,6 @@ fabric.properties
 
 
 /lib
+
+# Local Netlify folder
+.netlify
