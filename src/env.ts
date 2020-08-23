@@ -16,7 +16,7 @@ if (!isDefine(repo)) {
 if (!isDefine(branch)) {
     throw new Error("require process.env.REACT_APP_GITHUB_BRANCH=xxx");
 }
-if (!isDefine(token) && !dryRun) {
+if (!isDefine(token)) {
     throw new Error("require process.env.REACT_APP_GITHUB_TOKEN");
 }
 export const env = {
