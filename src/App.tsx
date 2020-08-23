@@ -10,9 +10,12 @@ import {
     updateProjectBoard,
     moveCard,
     updateProject,
-    deleteCard
+    deleteCard,
+    applyAutoRule,
+    archiveDone
 } from "./data/State";
 import { ProjectBoard } from "./data/DataScheme";
+import { Toolbar } from "./toolbar/Toolbar";
 
 function App() {
     useEffect(() => {
@@ -36,9 +39,21 @@ function App() {
         // data change → card move
         // store.dispatch(updateProjectContents(payload));
     };
+    const onApplyAutoRule = async () => {
+        await store.dispatch(applyAutoRule());
+        // await store.dispatch(updateProject());
+    };
+    const onRefresh = async () => {
+        await store.dispatch(updateProject());
+    };
+    const onArchive = async () => {
+        await store.dispatch(archiveDone());
+        // await store.dispatch(updateProject());
+    };
     const projectContents = useSelector<State, State["projectContents"]>((state) => state.projectContents);
     return (
         <div className="App">
+            <Toolbar onApplyAutoRule={onApplyAutoRule} onRefresh={onRefresh} onArchive={onArchive} />
             <MyBoard
                 projectData={projectContents}
                 onProjectDateChange={onProjectDateChange}

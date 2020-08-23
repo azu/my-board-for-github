@@ -1,0 +1,24 @@
+.Toolbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin: 0.5em;
+}
+
+.ToolbarButton {
+    color: #24292e;
+    background-color: #fafbfc;
+    box-shadow: 0 1px 0 rgba(27, 31, 35, 0.04), inset 0 1px 0 hsla(0, 0%, 100%, 0.25);
+    position: relative;
+    display: inline-block;
+    padding: 5px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid rgba(27, 31, 35, 0.15);
+    border-radius: 6px;
+}

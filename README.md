@@ -1,3 +1,57 @@
+# My-Board-For-Github(MYFG)
+
+My-Board-For-Github(MYFG) provide GitHub Project feature to handle across all repositories.
+
+- GitHub's [user-owned project board](https://docs.github.com/en/github/managing-your-work-on-github/creating-a-project-board#creating-a-user-owned-project-board) limit repositories
+- GitHub Repository/Organization Project board does not treat outside of the repository and organization.
+- My-Board-For-Github(MYFG) can treat all repositories if you can access
+
+My-Board-For-Github(MYFG) can also treat non-own project's issue and pull request.
+MYFG just require GitHub's issue/pr url for handling in the project board.
+
+## Usage
+
+1. Create your My-Board-For-Github(MYFG) data repository
+    - e.g. `example-owner/my-board-data`
+2. [Create Personal AccessToken for your GitHub Account](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
+    - require: `repo` scope
+3. Access My-Board-For-Github(MYFG)
+
+- `https://my-board-for-github.netlify.app/?owner=<owner>&repo=<repo>&branch=<branch>&token=<token>`
+
+Parameters:
+
+- `owner`: owner name of data repository
+    - `example-owner`
+- `repo`: repo name of data repository
+    - `my-board-data`
+- `branch`: branch name of data repository
+    - `master"`
+- `token`: GitHub Access Token for MYFG
+    - `xxxx`
+
+### Add item to your project
+
+Use [Greasemonkey script](userscript/github) for MYFG.
+
+It allow you to add issue and pull request to your project from GitHub.
+
+## Contributing
+
+1. Fork it!
+2. Create your feature branch: `git checkout -b my-new-feature`
+3. Commit your changes: `git commit -am 'Add some feature'`
+4. Push to the branch: `git push origin my-new-feature`
+5. Submit a pull request :D
+
+## License
+
+MIT
+
+---
+
+## Development
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

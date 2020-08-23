@@ -16,5 +16,9 @@ export const fetchProjectData = async (): Promise<ProjectBoard> => {
 };
 
 export const updateProjectData = async (projectData: ProjectBoard) => {
+    if (env.dryRun) {
+        console.log("dryRun mode - no update project data");
+        return;
+    }
     return koreFile.writeFile("project.json", JSON.stringify(projectData, null, 4));
 };

@@ -3,6 +3,7 @@ const owner = process.env.REACT_APP_GITHUB_OWNER ?? searchParams.get("owner");
 const repo = process.env.REACT_APP_GITHUB_REPO ?? searchParams.get("repo");
 const branch = process.env.REACT_APP_GITHUB_BRANCH ?? searchParams.get("branch");
 const token = process.env.REACT_APP_GITHUB_TOKEN ?? searchParams.get("token");
+const dryRun = process.env.REACT_APP_DRY_RUN ?? searchParams.get("dryrun") ?? false;
 const isDefine = (str: unknown): str is string => {
     return typeof str === "string" && str.length > 0;
 };
@@ -22,5 +23,6 @@ export const env = {
     owner,
     repo,
     branch,
-    token
+    token,
+    dryRun
 };

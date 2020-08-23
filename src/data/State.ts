@@ -75,15 +75,56 @@ export const fetchProjectContents = createAsyncThunk("project/fetchProjectConten
 
 export const updateProject = createAsyncThunk("project/updateProject", async (_, thunkAPI) => {
     const state = thunkAPI.getState() as State;
-    console.log("state", state);
     return updateProjectData(state.projectBoard);
+});
+
+export const applyAutoRule = createAsyncThunk("project/applyAutoRule", async (_, thunkAPI) => {
+    const state = thunkAPI.getState() as State;
+    const doneLane = state.projectContents.lanes.find((lane) => lane.id === "done");
+    if (!doneLane) {
+        throw new Error("Not found done Lane");
+    }
+    let doneLaneCardCount = doneLane.cards?.length ?? 0;
+    state.projectContents.lanes.forEach((lane: ReactTrello.Lane) => {
+        lane.cards?.forEach((card) => {
+            const metadata = card.metadata as GitHubSearchResultItemJSON;
+            const isClosed = Boolean(metadata.closed_at);
+            if (isClosed) {
+                thunkAPI.dispatch(
+                    slice.actions.moveCard({
+                        cardId: card.id!,
+                        fromLaneId: lane.id!,
+                        index: ++doneLaneCardCount,
+                        toLaneId: doneLane.id
+                    })
+                );
+            }
+        });
+    });
+});
+export const archiveDone = createAsyncThunk("project/archiveDone", async (_, thunkAPI) => {
+    const state = thunkAPI.getState() as State;
+    const doneLane = state.projectContents.lanes.find((lane) => lane.id === "done");
+    if (!doneLane) {
+        throw new Error("Not found done Lane");
+    }
+    // @ts-expect-error - card any?
+    doneLane.cards.forEach((card) => {
+        thunkAPI.dispatch(
+            slice.actions.deleteCard({
+                cardId: card.id!,
+                laneId: doneLane.id!
+            })
+        );
+    });
 });
 
 const slice = createSlice({
     name: "ProjectBoard",
     initialState,
     reducers: {
-        cardAdd() {},
+        // If the issue or pr is closed, move to done
+        applyAutoRule(state) {},
         deleteCard(state, action: PayloadAction<{ cardId: string; laneId: string }>) {
             return produce(state, (currentState) => {
                 // lane
@@ -199,6 +240,12 @@ const slice = createSlice({
             };
         });
         builder.addCase(updateProject.fulfilled, (state, action) => {
+            return state;
+        });
+        builder.addCase(applyAutoRule.fulfilled, (state, action) => {
+            return state;
+        });
+        builder.addCase(archiveDone.fulfilled, (state, action) => {
             return state;
         });
     }
