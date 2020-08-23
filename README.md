@@ -9,6 +9,8 @@ GitHub Project Board to handle across all repositories!
 My-Board-For-Github(MYFG) can also treat non-own project's issue and pull request.
 MYFG just require GitHub's issue/pr url for handling in the project board.
 
+![My-Board-For-Github](docs/img/screenshot.png)
+
 ## Usage
 
 1. Create your My-Board-For-Github(MYFG) data repository
