@@ -1,6 +1,6 @@
 # My-Board-For-Github(MYFG)
 
-GitHub Project Board to handle across all repositories!
+Project Board to handle across all GitHub repositories!
 
 - GitHub's [user-owned project board](https://docs.github.com/en/github/managing-your-work-on-github/creating-a-project-board#creating-a-user-owned-project-board) limit repositories
 - GitHub Repository/Organization Project board does not treat outside of the repository and organization.
