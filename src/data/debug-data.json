@@ -4,11 +4,11 @@
     "title": "Inbox",
     "items": [
       {
-        "url": "https://github.com/asciidwango/js-primer/issues/1232",
+        "url": "https://github.com/facebook/react/issues/19670",
         "type": "issue"
       },
       {
-        "url": "https://github.com/asciidwango/js-primer/issues/1177",
+        "url": "https://github.com/microsoft/TypeScript/issues/40124",
         "type": "issue"
       }
     ]
@@ -23,6 +23,14 @@
     "id": "done",
     "title": "Done",
     "items": [
+      {
+        "url": "https://github.com/github/roadmap/issues/65",
+        "type": "issue"
+      },
+      {
+        "url": "https://github.com/github/opensource.guide/pull/1704",
+        "type": "pull_request"
+      }
     ]
   }
 ]

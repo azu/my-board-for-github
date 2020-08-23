@@ -13,6 +13,10 @@ MYFG just require GitHub's issue/pr url for handling in the project board.
 
 1. Create your My-Board-For-Github(MYFG) data repository
     - e.g. `example-owner/my-board-data`
+2. Create `project.json` into data repository
+    - e.g. [project.json](https://github.com/azu/my-board-for-github-example/blob/master/project.json)
+    - For more details about the schema, see [src/data/DataScheme.ts](src/data/DataScheme.ts)
+    - `inbox` and `done` id is special meaning
 2. [Create Personal AccessToken for your GitHub Account](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
     - require: `repo` scope
 3. Access My-Board-For-Github(MYFG)
@@ -34,7 +38,7 @@ Parameters:
 
 Use [Greasemonkey script](userscript/github) for MYFG.
 
-It allow you to add issue and pull request to your project from GitHub.
+It allows you to add issue and pull request to your project from GitHub.
 
 ## Contributing
 

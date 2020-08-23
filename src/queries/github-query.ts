@@ -120,9 +120,11 @@ export const fetchIssueOrPullRequest = (
     params: fetchIssueOrPullRequestParam[]
 ): Promise<GitHubSearchResultItemJSON[]> => {
     const graphQLClient = new GraphQLClient("https://api.github.com/graphql", {
-        headers: {
-            authorization: `Bearer ${env.token}`
-        }
+        headers: !env.dryRun
+            ? {
+                  authorization: `Bearer ${env.token}`
+              }
+            : {}
     });
     const queries = params
         .map((param) => {

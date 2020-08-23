@@ -7,7 +7,7 @@ const koreFile = createKoreFile({
         owner: env.owner,
         repo: env.repo,
         ref: "heads/" + env.branch,
-        token: env.token
+        token: env.token ?? undefined
     })
 });
 export const fetchProjectData = async (): Promise<ProjectBoard> => {
