@@ -100,6 +100,7 @@ declare module ReactTrello {
          * Called when a card is clicked: onCardClick(cardId, metadata, laneId)
          */
         onCardClick?: (cardId: string, metaData: CardMetaData, laneId: string) => void;
+        onCardMoveAcrossLanes?: (fromLaneId: string, toLaneId: string, cardId: string, index: number) => void;
         /**
          * Called when a new card is added: onCardAdd(card, laneId)
          */
@@ -183,5 +184,5 @@ declare module ReactTrello {
 
 declare module "react-trello" {
     export = ReactTrelloBoard;
-    export { BoardData, DraggableCard };
+    export type ReactTrello = ReactTrello;
 }

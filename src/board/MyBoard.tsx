@@ -1,13 +1,17 @@
 import React from "react";
-import ReactTrello, { BoardData, DraggableCard } from "react-trello";
+import ReactTrelloBoard, { ReactTrello } from "react-trello";
 import { GitHubSearchResultItemJSON } from "../queries/github-query";
 import { klona } from "klona";
+import "./MyBoard.css";
 
-export type CardMetaData = {};
-export type ProjectBoardData = BoardData<CardMetaData>;
+export type CardMetaData = GitHubSearchResultItemJSON;
+export type ProjectBoardData = ReactTrello.BoardData<CardMetaData>;
 export type MyBoardProps = {
-    projectData?: BoardData<CardMetaData>;
+    projectData?: ReactTrello.BoardData<CardMetaData>;
     onProjectDateChange: (projectData: ProjectBoardData) => void;
+    onDataChange: (projectData: ProjectBoardData) => void;
+    onCardDelete: ({ cardId, laneId }: { cardId: string; laneId: string }) => void;
+    onCardMove: (payload: { fromLaneId: string; toLaneId: string; cardId: string; index: number }) => void;
 };
 
 export function MyBoard(props: MyBoardProps) {
@@ -18,22 +22,27 @@ export function MyBoard(props: MyBoardProps) {
         window.open(metadata.html_url, "_blank");
     };
     const copyProjectDaa = klona(props.projectData);
-    const onDataChange = (projectData: ProjectBoardData) => {
-        props.onProjectDateChange(projectData);
+    if (!copyProjectDaa) {
+        return null;
+    }
+    const onCardDelete = (cardId: string, laneId: string) => {
+        props.onCardDelete({ cardId, laneId });
     };
-    const onCardAdd = (card: DraggableCard, laneId: string) => {
-        console.log(card, laneId);
+    // also happen in same lanes
+    const onCardMoveAcrossLanes = (fromLaneId: string, toLaneId: string, cardId: string, index: number) => {
+        props.onCardMove({ cardId, index, toLaneId, fromLaneId });
     };
-    const onCardDelete = (card: DraggableCard, laneId: string) => {
-        console.log(card, laneId);
+    const onDataChange = (projectData: any) => {
+        console.log("onDataChange", projectData);
+        props.onDataChange(projectData as ReactTrello.BoardData<CardMetaData>);
     };
     return (
-        <ReactTrello
+        <ReactTrelloBoard
             data={copyProjectDaa}
-            onDataChange={onDataChange}
-            onCardAdd={onCardAdd}
-            onCardDelete={onCardDelete}
             onCardClick={onCardClick}
+            onCardDelete={onCardDelete}
+            onDataChange={onDataChange}
+            onCardMoveAcrossLanes={onCardMoveAcrossLanes}
         />
     );
 }

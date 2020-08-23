@@ -5,8 +5,11 @@
     "items": [
       {
         "url": "https://github.com/asciidwango/js-primer/issues/1232",
-        "type": "issue",
-        "meta": {}
+        "type": "issue"
+      },
+      {
+        "url": "https://github.com/asciidwango/js-primer/issues/1177",
+        "type": "issue"
       }
     ]
   },

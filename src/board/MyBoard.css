@@ -1,0 +1,12 @@
+.react-trello-card > header {
+    display: block;
+    white-space: pre-wrap;
+}
+
+.react-trello-card > header > span[draggable] {
+    display: block;
+}
+
+.react-trello-card > header > span {
+    width: 100%;
+}

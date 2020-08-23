@@ -41,6 +41,8 @@
     "extends": "react-app"
   },
   "dependencies": {
+    "korefile": "^1.1.0",
+    "immer": "^7.0.7",
     "klona": "^2.0.1",
     "@reduxjs/toolkit": "^1.4.0",
     "@testing-library/jest-dom": "^5.11.3",
