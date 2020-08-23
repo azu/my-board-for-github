@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "name": "add-item-to-my-board-for-github",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "parcel build --no-source-maps --no-content-hash ./add-item-to-my-board-for-github.user.ts --out-dir ./dist"
+  },
+  "keywords": [],
+  "author": "azu",
+  "license": "MIT",
+  "devDependencies": {
+    "parcel": "^1.12.4",
+    "parcel-plugin-greasemonkey": "^1.0.3"
+  }
+}

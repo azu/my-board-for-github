@@ -1,0 +1,7 @@
+// ==UserScript==
+// @name GitHub: add item to my-board-for-github
+// @namespace my-board-for-github
+// @match https://github.com/*/*/issues/*
+// @match https://github.com/*/*/pull/*
+// @grant none
+// ==/UserScript==

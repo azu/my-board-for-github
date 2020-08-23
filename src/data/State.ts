@@ -31,7 +31,7 @@ export const fetchProjectContents = createAsyncThunk("project/fetchProjectConten
         return projectColumn.items;
     });
     const params = projectItems.flatMap((projectItem) => {
-        const issuePattern = /^https:\/\/github.com\/(?<owner>[0-9a-zA-Z-_.]+)\/(?<repo>[0-9a-zA-Z-_.]+)\/(?<type>(issues|pulls))\/(?<number>[0-9]+)/;
+        const issuePattern = /^https:\/\/github.com\/(?<owner>[0-9a-zA-Z-_.]+)\/(?<repo>[0-9a-zA-Z-_.]+)\/(?<type>(issues|pull))\/(?<number>[0-9]+)/;
         const match = projectItem.url.match(issuePattern);
         if (!match) {
             return [];

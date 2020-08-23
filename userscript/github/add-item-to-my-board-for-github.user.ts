@@ -1,0 +1,32 @@
+import { fetchProjectData, updateProjectData } from "../../src/data/github-data";
+import produce from "immer";
+
+type URL_TYPE = "issue" | "pull_request";
+(async function main() {
+    const URLPATTERN = /^https:\/\/github.com\/(?<owner>[0-9a-zA-Z-_.]+)\/(?<repo>[0-9a-zA-Z-_.]+)\/(?<type>(issues|pull))\/(?<number>[0-9]+)/;
+    const url = window.location.href;
+    const match = url.match(URLPATTERN);
+    if (!match) {
+        return;
+    }
+    const type: URL_TYPE = match.groups?.type === "issues" ? "issue" : "pull_request";
+    const addItemToProject = async () => {
+        const boardData = await fetchProjectData();
+        const newBoardData = produce(boardData, (currentBoard) => {
+            const board = currentBoard.find((item) => item.id === "inbox");
+            board?.items.push({
+                type,
+                url
+            });
+        });
+        await updateProjectData(newBoardData);
+    };
+    const insertElement = document.querySelector(".thread-subscription-status");
+    const addItemButton = document.createElement("button");
+    addItemButton.textContent = "Add to My Board";
+    addItemButton.className = "btn btn-block btn-sm thread-subscribe-button";
+    addItemButton.addEventListener("click", () => {
+        addItemToProject();
+    });
+    insertElement?.append(addItemButton);
+})();

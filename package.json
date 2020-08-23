@@ -9,6 +9,9 @@
     "start": "react-scripts start",
     "test": "react-scripts test"
   },
+  "workspaces": [
+    "userscript/*"
+  ],
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
