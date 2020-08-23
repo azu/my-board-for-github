@@ -40,14 +40,14 @@ function App() {
     };
     const onApplyAutoRule = async () => {
         await store.dispatch(applyAutoRule());
-        // await store.dispatch(updateProject());
+        await store.dispatch(updateProject());
     };
     const onRefresh = async () => {
         await store.dispatch(updateProject());
     };
     const onArchive = async () => {
         await store.dispatch(archiveDone());
-        // await store.dispatch(updateProject());
+        await store.dispatch(updateProject());
     };
     const projectContents = useSelector<State, State["projectContents"]>((state) => state.projectContents);
     return (
