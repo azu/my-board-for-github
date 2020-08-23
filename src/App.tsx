@@ -43,7 +43,8 @@ function App() {
         await store.dispatch(updateProject());
     };
     const onRefresh = async () => {
-        await store.dispatch(updateProject());
+        await store.dispatch(fetchProjectBoard());
+        await store.dispatch(fetchProjectContents());
     };
     const onArchive = async () => {
         await store.dispatch(archiveDone());
