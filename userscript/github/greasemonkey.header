@@ -3,5 +3,5 @@
 // @namespace my-board-for-github
 // @match https://github.com/*/*/issues/*
 // @match https://github.com/*/*/pull/*
-// @grant none
+// @grant GM_getValue
 // ==/UserScript==

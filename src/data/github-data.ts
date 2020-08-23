@@ -1,28 +1,13 @@
 import { createKoreFile, createGitHubAdaptor } from "korefile";
 import { ProjectBoard } from "./DataScheme";
+import { env } from "../env";
 
-const owner = process.env.REACT_APP_GITHUB_OWNER;
-const repo = process.env.REACT_APP_GITHUB_REPO;
-const branch = process.env.REACT_APP_GITHUB_BRANCH;
-const token = process.env.REACT_APP_GITHUB_TOKEN;
-if (!owner) {
-    throw new Error("require process.env.REACT_APP_GITHUB_OWNER=xxx");
-}
-if (!repo) {
-    throw new Error("require process.env.REACT_APP_GITHUB_REPO=xxx");
-}
-if (!branch) {
-    throw new Error("require process.env.REACT_APP_GITHUB_BRANCH=xxx");
-}
-if (!token) {
-    throw new Error("require process.env.REACT_APP_GITHUB_TOKEN");
-}
 const koreFile = createKoreFile({
     adaptor: createGitHubAdaptor({
-        owner: owner,
-        repo: repo,
-        ref: "heads/" + branch,
-        token: token
+        owner: env.owner,
+        repo: env.repo,
+        ref: "heads/" + env.branch,
+        token: env.token
     })
 });
 export const fetchProjectData = async (): Promise<ProjectBoard> => {

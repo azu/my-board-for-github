@@ -7,6 +7,29 @@
     display: block;
 }
 
+article.react-trello-card {
+    text-align: left;
+}
+.MyBoardDescription ul {
+    padding: 0;
+}
+
 .react-trello-card > header > span {
     width: 100%;
+}
+
+.MyBoardIcon {
+    padding-right: 4px;
+}
+
+.IssueOpenedIcon {
+    color: green;
+}
+
+.IssueClosedIcon {
+    color: red;
+}
+
+.GitPullRequestIcon {
+    color: green;
 }

@@ -1,4 +1,5 @@
 import { GraphQLClient } from "graphql-request";
+import { env } from "../env";
 
 export type fetchIssueOrPullRequestParam = {
     type: "issue" | "pr";
@@ -46,6 +47,9 @@ export interface GitHubSearchResultItemJSON {
     labels: Label[];
     state: "merged" | "closed" | "open";
     locked: boolean;
+    repository: {
+        url: string;
+    };
     assignees: Assignee[];
     milestone: Milestone | null;
     comments: number;
@@ -117,7 +121,7 @@ export const fetchIssueOrPullRequest = (
 ): Promise<GitHubSearchResultItemJSON[]> => {
     const graphQLClient = new GraphQLClient("https://api.github.com/graphql", {
         headers: {
-            authorization: `Bearer ${process.env.REACT_APP_GITHUB_TOKEN}`
+            authorization: `Bearer ${env.token}`
         }
     });
     const queries = params
@@ -209,6 +213,9 @@ ${queries.join("\n")}
                     html_url: node.url
                 };
             }),
+            repository: {
+                url: response.repository.url
+            },
             body: response.body,
             closed_at: response.closedAt,
             comments: response.comments.totalCount,

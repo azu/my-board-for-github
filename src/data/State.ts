@@ -61,8 +61,8 @@ export const fetchProjectContents = createAsyncThunk("project/fetchProjectConten
                             return {
                                 id: response.id,
                                 title: response.title,
-                                description: response.body?.slice(0, 50),
-                                label: response.labels.map((label) => label.name).join(","),
+                                description: response.body,
+                                label: response.repository.url,
                                 metadata: response
                             };
                         })

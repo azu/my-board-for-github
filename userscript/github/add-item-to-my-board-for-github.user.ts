@@ -1,5 +1,5 @@
-import { fetchProjectData, updateProjectData } from "../../src/data/github-data";
 import produce from "immer";
+import { createClient } from "./github-data";
 
 type URL_TYPE = "issue" | "pull_request";
 (async function main() {
@@ -11,7 +11,8 @@ type URL_TYPE = "issue" | "pull_request";
     }
     const type: URL_TYPE = match.groups?.type === "issues" ? "issue" : "pull_request";
     const addItemToProject = async () => {
-        const boardData = await fetchProjectData();
+        const client = await createClient();
+        const boardData = await client.fetchProjectData();
         const newBoardData = produce(boardData, (currentBoard) => {
             const board = currentBoard.find((item) => item.id === "inbox");
             board?.items.push({
@@ -19,7 +20,7 @@ type URL_TYPE = "issue" | "pull_request";
                 url
             });
         });
-        await updateProjectData(newBoardData);
+        await client.updateProjectData(newBoardData);
     };
     const insertElement = document.querySelector(".thread-subscription-status");
     const addItemButton = document.createElement("button");
