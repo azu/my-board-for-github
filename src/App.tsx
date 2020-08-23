@@ -31,7 +31,6 @@ function App() {
         store.dispatch(updateProject());
     };
     const onCardDelete = (payload: { cardId: string; laneId: string }) => {
-        console.log("onCardDelete", payload);
         store.dispatch(deleteCard(payload));
         store.dispatch(updateProject());
     };

@@ -254,7 +254,6 @@ ${queries.join("\n")}
             }
         };
     };
-    console.log("graphQLQuery", graphQLQuery);
     return graphQLClient
         .request(graphQLQuery)
         .then((data) => {

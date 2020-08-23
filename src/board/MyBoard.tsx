@@ -68,7 +68,6 @@ export function MyBoard(props: MyBoardProps) {
         props.onCardMove({ cardId, index, toLaneId, fromLaneId });
     };
     const onDataChange = (projectData: any) => {
-        console.log("onDataChange", projectData);
         props.onDataChange(projectData as ReactTrello.BoardData<CardMetaData>);
     };
     return (
