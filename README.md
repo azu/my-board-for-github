@@ -89,9 +89,11 @@ Require your GitHub Access Token, because GraphQL API always require Access Toke
 
 ### Add item to your project
 
-Use [Greasemonkey script](userscript/github) for MYFG.
+Currently, My-Board-For-Github(MYFG) does not provide adding method yet.
 
-It allows you to add issue and pull request to your project from GitHub.
+Instead of it, Use [Greasemonkey script](userscript/github) for MYFG.
+
+It allows you to add issue and pull request to your project from GitHub directly.
 
 ## Contributing
 
