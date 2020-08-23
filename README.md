@@ -35,6 +35,7 @@ Parameters:
     - `master"`
 - `token`: GitHub Access Token for MYFG
     - `xxxx`
+    - :memo: Store `token` into localStorage and remove `token` parameter from URL after token is passed. 
     
 ### `project.json` format
 
