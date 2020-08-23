@@ -95,6 +95,8 @@ Instead of it, Use [Greasemonkey script](userscript/github) for MYFG.
 
 It allows you to add issue and pull request to your project from GitHub directly.
 
+![greasemonkey](docs/img/greasemonkey.png)
+
 For more details, see [userscript/github](userscript/github).
 
 ## Contributing
