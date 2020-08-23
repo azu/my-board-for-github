@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "parcel build --no-source-maps --no-content-hash ./add-item-to-my-board-for-github.user.ts --out-dir ./dist"
+    "build": "parcel build --no-source-maps --no-content-hash ./add-item-to-my-board-for-github.user.ts --out-dir ./distribution"
   },
   "keywords": [],
   "author": "azu",
