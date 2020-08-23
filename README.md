@@ -84,7 +84,7 @@ Data repository require a `project.json` file under the root directory.
 
 Sadly, the example require your GitHub Access Token, because GraphQL API always require Access Token. 
 
-- <https://my-board-for-github.netlify.app/?owner=azu&repo=my-board-for-github-example&branch=master&token=xxx&dryrun=true>
+- Example: <https://my-board-for-github.netlify.app/?owner=azu&repo=my-board-for-github-example&branch=master&token=xxx&dryrun=true>
 - Repository: [azu/my-board-for-github-example](https://github.com/azu/my-board-for-github-example)
 
 ### Add item to your project
