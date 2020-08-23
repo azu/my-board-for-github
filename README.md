@@ -33,6 +33,50 @@ Parameters:
     - `master"`
 - `token`: GitHub Access Token for MYFG
     - `xxxx`
+    
+### `project.json` format
+
+Data repository require a `project.json` file under the root directory.
+`project.json` schema is defined in [src/data/DataScheme.ts](src/data/DataScheme.ts).
+
+```json
+[
+  {
+    "id": "inbox",
+    "title": "Inbox",
+    "items": [
+      {
+        "url": "https://github.com/facebook/react/issues/19670",
+        "type": "issue"
+      },
+      {
+        "url": "https://github.com/microsoft/TypeScript/issues/40124",
+        "type": "issue"
+      }
+    ]
+  },
+  {
+    "id": "progressing",
+    "title": "Progressing",
+    "items": [
+    ]
+  },
+  {
+    "id": "done",
+    "title": "Done",
+    "items": [
+      {
+        "url": "https://github.com/github/roadmap/issues/65",
+        "type": "issue"
+      },
+      {
+        "url": "https://github.com/github/opensource.guide/pull/1704",
+        "type": "pull_request"
+      }
+    ]
+  }
+]
+```
 
 ### Examples
 
