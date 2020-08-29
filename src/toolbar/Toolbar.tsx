@@ -2,6 +2,7 @@ import React from "react";
 import "./Toolbar.css";
 import { ArchiveIcon, DatabaseIcon } from "@primer/octicons-react";
 import { env } from "../env";
+
 export type ToolbarProps = {
     onRefresh: () => void;
     onApplyAutoRule: () => void;
@@ -25,7 +26,13 @@ export const Toolbar = (props: ToolbarProps) => {
                 <ArchiveIcon size={16} />
                 Archive
             </button>
-            <a className={"ToolbarButton"} href={dbURL} title={"See your database"} target={"_blank"}>
+            <a
+                className={"ToolbarButton"}
+                href={dbURL}
+                title={"See your database"}
+                target={"_blank"}
+                rel="noopener noreferrer"
+            >
                 <DatabaseIcon size={16} />
             </a>
         </div>
