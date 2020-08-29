@@ -1,6 +1,6 @@
 import React from "react";
 import "./Toolbar.css";
-import { DatabaseIcon } from "@primer/octicons-react";
+import { ArchiveIcon, DatabaseIcon } from "@primer/octicons-react";
 import { env } from "../env";
 export type ToolbarProps = {
     onRefresh: () => void;
@@ -22,6 +22,7 @@ export const Toolbar = (props: ToolbarProps) => {
                 Apply Auto Rule
             </button>
             <button className={"ToolbarButton"} onClick={props.onArchive} title={"Archive all cards that are in done"}>
+                <ArchiveIcon size={16} />
                 Archive
             </button>
             <a className={"ToolbarButton"} href={dbURL} title={"See your database"} target={"_blank"}>
