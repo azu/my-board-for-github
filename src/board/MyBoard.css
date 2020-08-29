@@ -35,3 +35,7 @@ article.react-trello-card {
 .GitPullRequestIcon {
     color: green;
 }
+
+.GitPullRequestMergedIcon {
+    color: #6f42c1;
+}

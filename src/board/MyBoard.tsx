@@ -30,6 +30,7 @@ export function MyBoard(props: MyBoardProps) {
     copyProjectData?.lanes.forEach((lane: ReactTrello.Lane) => {
         lane.cards?.forEach((card) => {
             const status = (card.metadata as CardMetaData).state;
+            const closed = Boolean((card.metadata as CardMetaData).closed_at);
             card.title = (() => {
                 if (status === "closed") {
                     return (
@@ -38,17 +39,24 @@ export function MyBoard(props: MyBoardProps) {
                             {card.title}
                         </>
                     );
-                } else if (status === "merged") {
-                    return (
-                        <>
-                            <GitPullRequestIcon size={16} className={"MyBoardIcon GitPullRequestIcon"} />
-                            {card.title}
-                        </>
-                    );
                 } else if (status === "open") {
                     return (
                         <>
                             <IssueOpenedIcon size={16} className={"MyBoardIcon IssueOpenedIcon"} />
+                            {card.title}
+                        </>
+                    );
+                } else if (status === "merged" && closed) {
+                    return (
+                        <>
+                            <GitPullRequestIcon size={16} className={"MyBoardIcon GitPullRequestMergedIcon"} />
+                            {card.title}
+                        </>
+                    );
+                } else if (status === "merged") {
+                    return (
+                        <>
+                            <GitPullRequestIcon size={16} className={"MyBoardIcon GitPullRequestIcon"} />
                             {card.title}
                         </>
                     );
