@@ -27,7 +27,17 @@ type URL_TYPE = "issue" | "pull_request";
     addItemButton.textContent = "Add to My Board";
     addItemButton.className = "btn btn-block btn-sm thread-subscribe-button";
     addItemButton.addEventListener("click", () => {
-        addItemToProject();
+        addItemButton.textContent = "Progressing...";
+        addItemButton.disabled = true;
+        addItemToProject()
+            .then(() => {
+                addItemButton.textContent = "Added";
+            })
+            .catch((error) => {
+                console.error(error);
+                addItemButton.textContent = "Error: Retry";
+                addItemButton.disabled = false;
+            });
     });
     insertElement?.append(addItemButton);
 })();

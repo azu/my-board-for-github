@@ -5421,7 +5421,7 @@ parcelRequire = (function (e, r, t, n) {
                     (t.prototype = Object.create(e && e.prototype, {
                         constructor: { value: t, writable: !0, configurable: !0 }
                     })),
-                        e && s(t, e);
+                        e && p(t, e);
                 }
                 function c(t, e) {
                     return !e || ("object" !== r(e) && "function" != typeof e) ? i(t) : e;
@@ -5434,7 +5434,7 @@ parcelRequire = (function (e, r, t, n) {
                 function a(t) {
                     var e = "function" == typeof Map ? new Map() : void 0;
                     return (a = function (t) {
-                        if (null === t || !p(t)) return t;
+                        if (null === t || !s(t)) return t;
                         if ("function" != typeof t)
                             throw new TypeError("Super expression must either be null or a function");
                         if (void 0 !== e) {
@@ -5448,7 +5448,7 @@ parcelRequire = (function (e, r, t, n) {
                             (n.prototype = Object.create(t.prototype, {
                                 constructor: { value: n, enumerable: !1, writable: !0, configurable: !0 }
                             })),
-                            s(n, t)
+                            p(n, t)
                         );
                     })(t);
                 }
@@ -5459,7 +5459,7 @@ parcelRequire = (function (e, r, t, n) {
                               var r = [null];
                               r.push.apply(r, e);
                               var o = new (Function.bind.apply(t, r))();
-                              return n && s(o, n.prototype), o;
+                              return n && p(o, n.prototype), o;
                           }).apply(null, arguments);
                 }
                 function f() {
@@ -5472,11 +5472,11 @@ parcelRequire = (function (e, r, t, n) {
                         return !1;
                     }
                 }
-                function p(t) {
+                function s(t) {
                     return -1 !== Function.toString.call(t).indexOf("[native code]");
                 }
-                function s(t, e) {
-                    return (s =
+                function p(t, e) {
+                    return (p =
                         Object.setPrototypeOf ||
                         function (t, e) {
                             return (t.__proto__ = e), t;
@@ -5617,8 +5617,8 @@ parcelRequire = (function (e, r, t, n) {
                             a,
                             l,
                             f,
-                            p = this;
-                        return h(this, function (s) {
+                            s = this;
+                        return h(this, function (p) {
                             return (
                                 (r = o(
                                     /^https:\/\/github.com\/([\x2D\.0-9A-Z_a-z]+)\/([\x2D\.0-9A-Z_a-z]+)\/((issues|pull))\/([0-9]+)/,
@@ -5631,7 +5631,7 @@ parcelRequire = (function (e, r, t, n) {
                                               ? "issue"
                                               : "pull_request"),
                                       (a = function () {
-                                          return b(p, void 0, void 0, function () {
+                                          return b(s, void 0, void 0, function () {
                                               var n, r, o;
                                               return h(this, function (c) {
                                                   switch (c.label) {
@@ -5660,7 +5660,17 @@ parcelRequire = (function (e, r, t, n) {
                                       ((f = document.createElement("button")).textContent = "Add to My Board"),
                                       (f.className = "btn btn-block btn-sm thread-subscribe-button"),
                                       f.addEventListener("click", function () {
-                                          a();
+                                          (f.textContent = "Progressing..."),
+                                              (f.disabled = !0),
+                                              a()
+                                                  .then(function () {
+                                                      f.textContent = "Added";
+                                                  })
+                                                  .catch(function (t) {
+                                                      console.error(t),
+                                                          (f.textContent = "Error: Retry"),
+                                                          (f.disabled = !1);
+                                                  });
                                       }),
                                       null == l || l.append(f),
                                       [2])

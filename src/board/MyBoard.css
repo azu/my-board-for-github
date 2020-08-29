@@ -1,11 +1,11 @@
 .react-trello-card > header {
     display: block;
     white-space: pre-wrap;
-    pointer-events: none;
 }
 
 .react-trello-card > header > span[draggable] {
     display: block;
+    pointer-events: none;
 }
 
 article.react-trello-card {
