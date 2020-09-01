@@ -137,7 +137,7 @@ export const fetchIssueOrPullRequestWithSearchQuery = (param: {
         }
     });
     const query = `query Fetch($query: String!) {
-  search(query: $query, type: ISSUE, first: 20) {
+  search(query: $query, type: ISSUE, first: 40) {
     nodes {
       __typename
       ... on PullRequest {
