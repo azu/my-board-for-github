@@ -116,6 +116,210 @@ type QueryResponse = {
     body: string;
 };
 
+const convertState = (state: "OPEN" | "CLOSED" | "MERGED"): "open" | "closed" | "merged" => {
+    switch (state) {
+        case "OPEN":
+            return "open";
+        case "CLOSED":
+            return "closed";
+        case "MERGED":
+            return "merged";
+        default:
+            return state;
+    }
+};
+export const fetchIssueOrPullRequestWithSearchQuery = (param: {
+    query: string;
+}): Promise<GitHubSearchResultItemJSON[]> => {
+    const graphQLClient = new GraphQLClient("https://api.github.com/graphql", {
+        headers: {
+            authorization: `Bearer ${env.token}`
+        }
+    });
+    const query = `query Fetch($query: String!) {
+  search(query: $query, type: ISSUE, first: 20) {
+    nodes {
+      __typename
+      ... on PullRequest {
+        repository {
+          url
+        }
+        comments(last: 1) {
+          totalCount
+          nodes {
+            url
+          }
+        }
+        id
+        title
+        number
+        author {
+          login
+          avatarUrl
+          url
+        }
+        state
+        locked
+        labels(first: 10) {
+          nodes {
+            name
+            description
+            color
+            isDefault
+            url
+          }
+        }
+        assignees(first: 10) {
+          nodes {
+            avatarUrl
+            login
+            id
+            url
+          }
+        }
+        milestone {
+          title
+          description
+          url
+          createdAt
+          updatedAt
+          dueOn
+          closedAt
+          state
+        }
+        createdAt
+        updatedAt
+        closedAt
+        url
+        body
+      }
+      ... on Issue {
+        title
+        repository {
+          url
+        }
+        comments(last: 1) {
+          totalCount
+          nodes {
+            url
+          }
+        }
+        id
+        number
+        author {
+          login
+          avatarUrl
+          url
+        }
+        state
+        locked
+        labels(first: 10) {
+          nodes {
+            name
+            description
+            color
+            isDefault
+            url
+          }
+        }
+        assignees(first: 10) {
+          nodes {
+            avatarUrl
+            login
+            id
+            url
+          }
+        }
+        milestone {
+          title
+          description
+          url
+          createdAt
+          updatedAt
+          dueOn
+          closedAt
+          state
+        }
+        createdAt
+        updatedAt
+        closedAt
+        url
+        body
+      }
+    }
+  }
+}
+`;
+    const convertQueryResponseToGitHubSearchResult = (
+        type: "pr" | "issue",
+        response: QueryResponse
+    ): GitHubSearchResultItemJSON => {
+        return {
+            type,
+            assignees: response.assignees.nodes.map((node) => {
+                return {
+                    login: node.login,
+                    avatar_url: node.avatarUrl,
+                    html_url: node.url
+                };
+            }),
+            repository: {
+                url: response.repository.url
+            },
+            body: response.body,
+            closed_at: response.closedAt,
+            comments: response.comments.totalCount,
+            created_at: response.createdAt,
+            html_url: response.url,
+            id: response.id,
+            labels: response.labels.nodes.map((node) => {
+                return {
+                    color: node.color,
+                    default: node.isDefault,
+                    name: node.name,
+                    url: node.url
+                };
+            }),
+            locked: response.locked,
+            milestone: response.milestone
+                ? {
+                      html_url: response.milestone.url,
+                      title: response.milestone.title,
+                      description: response.milestone.description,
+                      created_at: response.milestone.createdAt,
+                      updated_at: response.milestone.updatedAt,
+                      closed_at: response.milestone.closedAt,
+                      due_on: response.milestone.dueOn,
+                      state: convertState(response.milestone.state)
+                  }
+                : null,
+            number: response.number,
+            state: convertState(response.state),
+            title: response.title,
+            updated_at: response.updatedAt,
+            user: {
+                avatar_url: response.author.avatarUrl,
+                html_url: response.author.url,
+                login: response.author.login
+            }
+        };
+    };
+    return graphQLClient
+        .request(query, {
+            query: param.query
+        })
+        .then((data) => {
+            console.log("data", data);
+            return data.search.nodes.map((node: any) => {
+                return convertQueryResponseToGitHubSearchResult(node.__typename === "Issue" ? "issue" : "pr", node);
+            });
+        })
+        .catch((error) => {
+            console.error(error);
+            return Promise.reject(error);
+        });
+};
+
 export const fetchIssueOrPullRequest = (
     params: fetchIssueOrPullRequestParam[]
 ): Promise<GitHubSearchResultItemJSON[]> => {
@@ -188,18 +392,6 @@ export const fetchIssueOrPullRequest = (
     const graphQLQuery = `{
 ${queries.join("\n")}
 }`;
-    const convertState = (state: "OPEN" | "CLOSED" | "MERGED"): "open" | "closed" | "merged" => {
-        switch (state) {
-            case "OPEN":
-                return "open";
-            case "CLOSED":
-                return "closed";
-            case "MERGED":
-                return "merged";
-            default:
-                return state;
-        }
-    };
     const convertQueryResponseToGitHubSearchResult = (
         type: "pr" | "issue",
         response: QueryResponse

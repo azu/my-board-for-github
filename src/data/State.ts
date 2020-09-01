@@ -1,9 +1,10 @@
 import produce from "immer";
-import { ProjectBoard } from "./DataScheme";
+import { ProjectBoard, ProjectColumn, ProjectItemColumn, ProjectQueryColumn } from "./DataScheme";
 import { configureStore, createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
     fetchIssueOrPullRequest,
     fetchIssueOrPullRequestParam,
+    fetchIssueOrPullRequestWithSearchQuery,
     GitHubSearchResultItemJSON
 } from "../queries/github-query";
 import { CardMetaData, ProjectBoardData } from "../board/MyBoard";
@@ -20,7 +21,15 @@ const initialState: State = {
         lanes: []
     }
 };
+
+const isQueryColumn = (column?: ProjectColumn): column is ProjectQueryColumn => {
+    return column !== undefined && "type" in column && column.type === "query";
+};
+const isProjectItemColumn = (column?: ProjectColumn): column is ProjectItemColumn => {
+    return column !== undefined && !("type" in column) && Array.isArray(column.items);
+};
 export const fetchProjectBoard = createAsyncThunk("project/fetchProjectBoard", async () => {
+    // return require("./debug-data.json");
     return fetchProjectData();
 });
 
@@ -28,6 +37,9 @@ export const fetchProjectContents = createAsyncThunk("project/fetchProjectConten
     const state = thunkAPI.getState() as State;
     const projectBoard = state.projectBoard;
     const projectItems = projectBoard.flatMap((projectColumn) => {
+        if (!("items" in projectColumn)) {
+            return [];
+        }
         return projectColumn.items;
     });
     const params = projectItems.flatMap((projectItem) => {
@@ -45,27 +57,59 @@ export const fetchProjectContents = createAsyncThunk("project/fetchProjectConten
         return [param];
     });
     const responses = await fetchIssueOrPullRequest(params);
+    // query
+    const queryColumns = projectBoard.filter((column) => {
+        return "type" in column && column.type === "query";
+    }) as ProjectQueryColumn[];
+    const queryResponses = new Map<string, GitHubSearchResultItemJSON[]>();
+    await Promise.all(
+        queryColumns.map((column) => {
+            return fetchIssueOrPullRequestWithSearchQuery({
+                query: column.query
+            }).then((items) => {
+                const nonDuplicatedItems = items.filter((item) => {
+                    return !projectItems.some((projectItem) => projectItem.url === item.html_url);
+                });
+                queryResponses.set(column.id, nonDuplicatedItems);
+            });
+        })
+    );
     const convert = (response: GitHubSearchResultItemJSON[]): ProjectBoardData => {
         return {
             lanes: projectBoard.map((projectColumn) => {
                 return {
                     id: projectColumn.id,
                     title: projectColumn.title,
-                    cards: response
-                        .filter((response) => {
-                            return projectColumn.items.some((item) => {
-                                return item.url === response.html_url;
-                            });
-                        })
-                        .map((response) => {
-                            return {
-                                id: response.id,
-                                title: response.title,
-                                description: response.body,
-                                label: response.repository.url,
-                                metadata: response
-                            };
-                        })
+                    cards:
+                        "type" in projectColumn && projectColumn.type === "query"
+                            ? queryResponses.get(projectColumn.id)?.map((response) => {
+                                  console.log("response", response);
+                                  return {
+                                      id: response.id,
+                                      title: response.title,
+                                      description: response.body,
+                                      label: response.repository.url,
+                                      metadata: response
+                                  };
+                              })
+                            : response
+                                  .filter((response) => {
+                                      if ("type" in projectColumn) {
+                                          return false;
+                                      }
+                                      return projectColumn.items.some((item) => {
+                                          return item.url === response.html_url;
+                                      });
+                                  })
+                                  .map((response) => {
+                                      return {
+                                          id: response.id,
+                                          title: response.title,
+                                          description: response.body,
+                                          label: response.repository.url,
+                                          metadata: response
+                                      };
+                                  })
                 };
             })
         };
@@ -102,6 +146,7 @@ export const applyAutoRule = createAsyncThunk("project/applyAutoRule", async (_,
         });
     });
 });
+
 export const archiveDone = createAsyncThunk("project/archiveDone", async (_, thunkAPI) => {
     const state = thunkAPI.getState() as State;
     const doneLane = state.projectContents.lanes.find((lane) => lane.id === "done");
@@ -123,8 +168,6 @@ const slice = createSlice({
     name: "ProjectBoard",
     initialState,
     reducers: {
-        // If the issue or pr is closed, move to done
-        applyAutoRule(state) {},
         deleteCard(state, action: PayloadAction<{ cardId: string; laneId: string }>) {
             return produce(state, (currentState) => {
                 // lane
@@ -151,6 +194,10 @@ const slice = createSlice({
                 }
                 // TODO: probably same html_url toorigin url
                 const originalUrl = card.metadata.html_url;
+                // No delete when query
+                if (isQueryColumn(fromBoard)) {
+                    return;
+                }
                 const itemIndex = fromBoard.items.findIndex((item) => item.url === originalUrl);
                 const originalItem = fromBoard.items[itemIndex];
                 if (itemIndex === -1 || originalItem === undefined) {
@@ -201,22 +248,57 @@ const slice = createSlice({
                 // board <-> lane
                 const fromBoard = projectBoard.find((board) => board.id === lane.id);
                 const toBoard = projectBoard.find((board) => board.id === toLane.id);
-                if (!fromBoard || !toBoard) {
-                    console.info("Not found from or to board");
-                    return currentState;
+                if (!isQueryColumn(fromBoard)) {
+                    if (!fromBoard || !toBoard) {
+                        console.info("Not found from or to board");
+                        return currentState;
+                    }
+                    // TODO: probably same html_url toorigin url
+                    const originalUrl = card.metadata.html_url;
+                    // No delete when query board
+
+                    const itemIndex = fromBoard.items.findIndex((item) => item.url === originalUrl);
+                    const originalItem = fromBoard.items[itemIndex];
+                    if (itemIndex === -1 || originalItem === undefined) {
+                        return currentState;
+                    }
+                    // remove from items
+                    fromBoard.items.splice(itemIndex, 1);
+                    // add to new board
+                    if (!isQueryColumn(toBoard)) {
+                        toBoard.items.splice(action.payload.index, 1, originalItem);
+                    }
+                } else {
+                    if (!toBoard) {
+                        console.info("Not found to board");
+                        return currentState;
+                    }
+                    if (!isProjectItemColumn(toBoard)) {
+                        console.info("to board is not item column");
+                        return currentState;
+                    }
+                    // only add to boar when query board
+                    // TODO: probably same html_url toorigin url
+                    const createNewItem = (metadata: CardMetaData) => {
+                        const issuePattern = /^https:\/\/github.com\/(?<owner>[0-9a-zA-Z-_.]+)\/(?<repo>[0-9a-zA-Z-_.]+)\/(?<type>(issues|pull))\/(?<number>[0-9]+)/;
+                        const match = metadata.html_url.match(issuePattern);
+                        if (!match) {
+                            return null;
+                        }
+                        const type: "issue" | "pull_request" =
+                            match.groups?.type === "issues" ? "issue" : "pull_request";
+                        return {
+                            type: type,
+                            url: metadata.html_url
+                        };
+                    };
+                    // No delete when query board
+                    const newItem = createNewItem(card.metadata);
+                    if (!newItem) {
+                        return;
+                    }
+                    toBoard.items.splice(action.payload.index, 1, newItem);
                 }
-                // TODO: probably same html_url toorigin url
-                const originalUrl = card.metadata.html_url;
-                const itemIndex = fromBoard.items.findIndex((item) => item.url === originalUrl);
-                const originalItem = fromBoard.items[itemIndex];
-                console.log("card", itemIndex, originalItem);
-                if (itemIndex === -1 || originalItem === undefined) {
-                    return currentState;
-                }
-                // remove from items
-                fromBoard.items.splice(itemIndex, 1);
-                // add to new board
-                toBoard.items.splice(action.payload.index, 1, originalItem);
             });
         },
         updateProjectBoard(state, action: PayloadAction<ProjectBoard>) {
