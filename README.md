@@ -45,6 +45,12 @@ Data repository require a `project.json` file under the root directory.
 ```json
 [
   {
+    "id": "activity",
+    "title": "Activity",
+    "type": "query",
+    "query": "involves:azu"
+  },
+  {
     "id": "inbox",
     "title": "Inbox",
     "items": [
