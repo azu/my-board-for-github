@@ -13,5 +13,8 @@
   "devDependencies": {
     "parcel": "^1.12.4",
     "parcel-plugin-greasemonkey": "^1.0.3"
+  },
+  "dependencies": {
+    "@kvs/env": "^1.0.0"
   }
 }
