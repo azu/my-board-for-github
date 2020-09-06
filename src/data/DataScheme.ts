@@ -14,6 +14,7 @@ export type ProjectQueryColumn = {
 export type ProjectItemColumn = {
     id: string;
     title: string;
+    type: "default";
     items: ProjectItem[];
 };
 export type ProjectColumn = ProjectItemColumn | ProjectQueryColumn;

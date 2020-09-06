@@ -8,6 +8,7 @@
   {
     "id": "inbox",
     "title": "Inbox",
+    "type": "default",
     "items": [
       {
         "url": "https://github.com/facebook/react/issues/19670",
@@ -22,12 +23,14 @@
   {
     "id": "progressing",
     "title": "Progressing",
+    "type": "default",
     "items": [
     ]
   },
   {
     "id": "done",
     "title": "Done",
+    "type": "default",
     "items": [
       {
         "url": "https://github.com/github/roadmap/issues/65",

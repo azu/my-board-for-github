@@ -26,7 +26,7 @@ const isQueryColumn = (column?: ProjectColumn): column is ProjectQueryColumn => 
     return column !== undefined && "type" in column && column.type === "query";
 };
 const isProjectItemColumn = (column?: ProjectColumn): column is ProjectItemColumn => {
-    return column !== undefined && !("type" in column) && Array.isArray(column.items);
+    return column !== undefined && "type" in column && column.type === "default";
 };
 export const fetchProjectBoard = createAsyncThunk("project/fetchProjectBoard", async () => {
     // return require("./debug-data.json");
@@ -59,7 +59,7 @@ export const fetchProjectContents = createAsyncThunk("project/fetchProjectConten
     const responses = await fetchIssueOrPullRequest(params);
     // query
     const queryColumns = projectBoard.filter((column) => {
-        return "type" in column && column.type === "query";
+        return column.type === "query";
     }) as ProjectQueryColumn[];
     const queryResponses = new Map<string, GitHubSearchResultItemJSON[]>();
     await Promise.all(
@@ -81,7 +81,7 @@ export const fetchProjectContents = createAsyncThunk("project/fetchProjectConten
                     id: projectColumn.id,
                     title: projectColumn.title,
                     cards:
-                        "type" in projectColumn && projectColumn.type === "query"
+                        projectColumn.type === "query"
                             ? queryResponses.get(projectColumn.id)?.map((response) => {
                                   console.log("response", response);
                                   return {
@@ -94,7 +94,7 @@ export const fetchProjectContents = createAsyncThunk("project/fetchProjectConten
                               })
                             : response
                                   .filter((response) => {
-                                      if ("type" in projectColumn) {
+                                      if (projectColumn.type !== "default") {
                                           return false;
                                       }
                                       return projectColumn.items.some((item) => {
@@ -243,7 +243,7 @@ const slice = createSlice({
                 // $ Update contents
                 // remove and add
                 lane?.cards?.splice(cardIndex, 1);
-                toLane?.cards?.splice(action.payload.index, 1, card);
+                toLane?.cards?.splice(action.payload.index, 0, card);
                 // $ Update board
                 // board <-> lane
                 const fromBoard = projectBoard.find((board) => board.id === lane.id);
@@ -266,7 +266,7 @@ const slice = createSlice({
                     fromBoard.items.splice(itemIndex, 1);
                     // add to new board
                     if (!isQueryColumn(toBoard)) {
-                        toBoard.items.splice(action.payload.index, 1, originalItem);
+                        toBoard.items.splice(action.payload.index, 0, originalItem);
                     }
                 } else {
                     if (!toBoard) {
@@ -297,7 +297,7 @@ const slice = createSlice({
                     if (!newItem) {
                         return;
                     }
-                    toBoard.items.splice(action.payload.index, 1, newItem);
+                    toBoard.items.splice(action.payload.index, 0, newItem);
                 }
             });
         },
