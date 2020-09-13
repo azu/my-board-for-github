@@ -56,13 +56,13 @@ export const fetchProjectContents = createAsyncThunk("project/fetchProjectConten
         };
         return [param];
     });
-    const responses = await fetchIssueOrPullRequest(params);
     // query
     const queryColumns = projectBoard.filter((column) => {
         return column.type === "query";
     }) as ProjectQueryColumn[];
     const queryResponses = new Map<string, GitHubSearchResultItemJSON[]>();
-    await Promise.all(
+    const defaultRequest = fetchIssueOrPullRequest(params);
+    const queryRequests = Promise.all(
         queryColumns.map((column) => {
             return fetchIssueOrPullRequestWithSearchQuery({
                 query: column.query
@@ -74,6 +74,8 @@ export const fetchProjectContents = createAsyncThunk("project/fetchProjectConten
             });
         })
     );
+    // concurrent requests
+    const [defaultResponses] = await Promise.all([defaultRequest, queryRequests]);
     const convert = (response: GitHubSearchResultItemJSON[]): ProjectBoardData => {
         return {
             lanes: projectBoard.map((projectColumn) => {
@@ -114,7 +116,7 @@ export const fetchProjectContents = createAsyncThunk("project/fetchProjectConten
             })
         };
     };
-    return convert(responses);
+    return convert(defaultResponses);
 });
 
 export const updateProject = createAsyncThunk("project/updateProject", async (_, thunkAPI) => {
