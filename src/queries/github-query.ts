@@ -169,7 +169,7 @@ export const fetchIssueOrPullRequestWithSearchQuery = (param: {
             url
           }
         }
-        assignees(first: 10) {
+        assignees(first: 1) {
           nodes {
             avatarUrl
             login
@@ -222,7 +222,7 @@ export const fetchIssueOrPullRequestWithSearchQuery = (param: {
             url
           }
         }
-        assignees(first: 10) {
+        assignees(first: 1) {
           nodes {
             avatarUrl
             login
