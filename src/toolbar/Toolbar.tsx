@@ -27,7 +27,7 @@ export const Toolbar = (props: ToolbarProps) => {
                     title={"Apply automation. Move closed issue to done column."}
                 >
                     <RocketIcon size={16} className={"ToolbarButtonIcon"} />
-                    Format task
+                    Format
                 </button>
                 <button
                     className={"ToolbarButton"}
