@@ -361,7 +361,7 @@ export const fetchIssueOrPullRequest = (
           url
         }
       }
-      assignees(first: 10) {
+      assignees(first: 1) {
         nodes {
           avatarUrl
           login
