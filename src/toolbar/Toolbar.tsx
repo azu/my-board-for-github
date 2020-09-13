@@ -50,7 +50,7 @@ export const Toolbar = (props: ToolbarProps) => {
             <div className={"ToolbarMetaMenu"}>
                 <a
                     className={"ToolbarButton"}
-                    href={"https://github.com/azu/my-board-data"}
+                    href={"https://github.com/azu/my-board-for-github"}
                     title={"Source Code"}
                     target={"_blank"}
                     rel="noopener noreferrer"
