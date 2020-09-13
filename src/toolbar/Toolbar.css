@@ -1,8 +1,21 @@
 .Toolbar {
-    position: fixed;
     top: 0;
     right: 0;
-    margin: 0.5em;
+    padding: 0.5em;
+    background: #fafbfc;
+    display: flex;
+}
+
+.ToolbarMenu {
+    flex: 1;
+}
+
+.ToolbarMetaMenu {
+    right: 0;
+}
+
+.ToolbarButtonIcon {
+    padding: 0 0.2em;
 }
 
 .ToolbarButton {
