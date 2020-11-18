@@ -331,7 +331,7 @@ export const fetchIssueOrPullRequest = (
     const queries = params
         .map((param, index) => {
             return `
-  ${param.type}${param.number}${index}:  repository(owner: "${param.owner}", name: "${param.repo}") {
+  ${param.type + param.number + "_" + index}:  repository(owner: "${param.owner}", name: "${param.repo}") {
     ${param.type === "issue" ? "issue" : "pullRequest"}(number: ${param.number}) {
       title
       repository {
